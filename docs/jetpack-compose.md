@@ -115,6 +115,19 @@ The `Modifier` system is crucial in Compose for several key reasons:
     -   `Modifier.background(Color.Blue).padding(16.dp)`: First, the background is drawn, then padding is applied _inside_ the background, pushing the content away from the edges of the background. This clear ordering makes layout predictable.
 6.  **Encapsulation:** When creating your own custom composables, you should accept a `modifier` parameter and pass it along to the root composable element inside your custom component. This allows users of your custom composable to modify its external properties (like size, padding, background) without needing access to its internal implementation details.
 
+In Jetpack Compose, the Text composable itself doesn't have a direct onClick parameter like a Button does. To make a Text clickable, you use the clickable Modifier.
+```kotlin
+@Composable
+fun ClickableTextExample() {
+    Text(
+        text = "Click Me!",
+        modifier = Modifier.clickable {
+            println("Text was clicked!")
+            // Add your click handling logic
+        }
+    )
+}
+```
 
 ***Note:*** Accepting a Modifier with a default value and forwarding it correctly allows your custom composables to be flexible building blocks that seamlessly integrate into any layout hierarchy, respecting modifications applied by their parent composables. Neglecting this pattern often leads to components that are rigid and difficult to reuse or position correctly in different contexts.
 
@@ -279,9 +292,9 @@ fun Greeting(...) {
 
 `remember`  is used to  **_guard_**  against recomposition, so the state is not reset.
 
-Note that if you call the same composable from different parts of the screen you will create different UI elements, each with its own version of the state.  **You can think of internal state as a private variable in a class.**
+Note that if you call the same composable from different parts of the screen you will create **different UI elements**, each with its own version of the state.  **You can think of internal state as a private variable in a class.**
 
-The composable function will automatically be "subscribed" to the state. If the state changes, composables that read these fields will be recomposed to display the updates.
+The composable function will automatically be "subscribed" to the state. **If the state changes, composables that read these fields will be recomposed to display the updates.**
 
 ### Expanding the item
 Now let's actually expand an item when requested. Add an additional variable that depends on our state:
@@ -330,3 +343,532 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 If you run on an emulator or in the interactive mode, you should see that each item can be expanded independently:
 
 ![alt text](https://developer.android.com/static/codelabs/jetpack-compose-basics/img/6675d41779cac69.gif)
+
+
+
+
+# State hoisting
+In Composable functions, state that is read or modified by multiple functions should live in a common ancestor—this process is called **state hoisting**. To hoist means to lift or elevate.
+
+Making state hoistable 
+* avoids duplicating state and introducing bugs, 
+* helps reuse composables, and makes composables substantially easier to test. 
+
+Contrarily, state that **doesn't need to be controlled by a composable's parent** should not be **hoisted**. The **source of truth** belongs to whoever creates and controls that state.
+
+For example, let's create an onboarding screen for our app.
+![alt text](https://developer.android.com/static/codelabs/jetpack-compose-basics/img/5d5f44508fcfa779_1920.png)
+
+```kotlin
+@Composable
+fun OnboardingScreen(modifier: Modifier = Modifier) {
+    // TODO: This state should be hoisted
+    var shouldShowOnboarding by remember { mutableStateOf(true) }
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Welcome to the Basics Codelab!")
+        Button(
+            modifier = Modifier.padding(vertical = 24.dp),
+            onClick = { shouldShowOnboarding = false } 
+        ) {
+            Text("Continue")
+        }
+    }
+}
+```
+This code contains a bunch of new features:
+
+* `shouldShowOnboarding` is using a `by` keyword instead of the `=`. This is a property delegate that saves you from typing `.value` every time.
+* When the button is clicked, shouldShowOnboarding is set to false, however you are not reading the state from anywhere yet.
+
+Now we can add this new onboarding screen to our app. We want to show it on launch and then hide it when the user presses "Continue".
+
+For example to show the onboarding screen or the list of greetings you would do something like:
+```kotlin
+@Composable
+fun MyApp(modifier: Modifier = Modifier) {
+    Surface(modifier) {
+        if (shouldShowOnboarding) { // We don't have access of shouldShowOnboarding though
+            OnboardingScreen()
+        } else {
+            Greetings()
+        }
+    }
+}
+```
+However we don't have access to  `shouldShowOnboarding`  . It's clear that we need to share the state that we created in  `OnboardingScreen`  with the  `MyApp`  composable.
+
+Instead of somehow sharing the value of the state with its parent, we  **_hoist_**  the state–we simply move it to the common ancestor that needs to access it.
+
+Now add the logic to show the different screens in MyApp, and hoist the state.
+
+```kotlin
+@Composable
+fun MyApp(modifier: Modifier = Modifier) {
+
+    var shouldShowOnboarding by remember { mutableStateOf(true) }
+
+    Surface(modifier) {
+        if (shouldShowOnboarding) {
+            OnboardingScreen(/* TODO */)
+        } else {
+            Greetings()
+        }
+    }
+}
+```
+
+We also need to share  `shouldShowOnboarding`  with the onboarding screen but we are not going to pass it directly. Instead of letting  `OnboardingScreen`  mutate our state, **it would be better to let it notify us when the user clicked on the  _Continue_  button.**
+
+How do we pass events up? By  **passing callbacks down**. Callbacks are functions that are passed as arguments to other functions and get executed when the event occurs.
+
+Try to add a function parameter to the onboarding screen defined as  `onContinueClicked: () -> Unit`  so you can mutate the state from  `MyApp`.
+
+Solution:
+
+```kotlin
+@Composable
+fun MyApp(modifier: Modifier = Modifier) {
+
+    var shouldShowOnboarding by remember { mutableStateOf(true) }
+
+    Surface(modifier) {
+        if (shouldShowOnboarding) {
+            OnboardingScreen(
+                onContinueClicked = { // passing callback down
+                    shouldShowOnboarding = false 
+                }
+            )
+        } else {
+            Greetings()
+        }
+    }
+}
+
+@Composable
+fun OnboardingScreen(
+    onContinueClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Welcome to the Basics Codelab!")
+        Button(
+            modifier = Modifier
+                .padding(vertical = 24.dp),
+            onClick = onContinueClicked
+        ) {
+            Text("Continue")
+        }
+    }
+
+}
+```
+
+By passing a function and not a state to  `OnboardingScreen`  we are making this composable more reusable and protecting the state from being mutated by other composables. In general, it keeps things simple. A good example is how the onboarding preview needs to be modified to call the  `OnboardingScreen`  now:
+
+```kotlin
+@Preview(showBackground = true, widthDp = 320, heightDp = 320)
+@Composable
+fun OnboardingPreview() {
+    BasicsCodelabTheme {
+        OnboardingScreen(onContinueClicked = {}) // Do nothing on click.
+    }
+}
+```
+
+Assigning  `onContinueClicked`  to an empty lambda expression means "do nothing", which is perfect for a preview.
+
+
+
+
+
+# Creating a performant lazy list
+
+To display a scrollable column we use a LazyColumn. LazyColumn renders only the visible items on screen, allowing performance gains when rendering a big list.
+
+**Note**:  `LazyColumn`  and  `LazyRow`  are equivalent to  `RecyclerView`  in Android Views.
+
+
+
+
+## Persisting state
+Data needs to be persisted in below scenarios:
+* configuration changes (such as rotations),
+* process death
+* when LazyColumn item goes out of screen height
+
+
+### remember vs rememberSaveable
+
+If you run the app on a device, click on the buttons and then you rotate, the onboarding screen is shown again. The  `remember`  function works  **only as long as the composable is kept in the Composition**. **When you rotate, the whole activity is restarted so all state is lost**. This also happens with **any configuration change and on process death.**
+
+Instead of using  `remember`  you can use  `rememberSaveable`. **This will save each state surviving configuration changes (such as rotations) and process death.**
+
+```kotlin
+import androidx.compose.runtime.saveable.rememberSaveable
+// ...
+
+var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
+```
+Run, rotate, change to dark mode or kill the process. The onboarding screen is not shown unless you have previously exited the app.
+
+### Persisting the expanded state of the list items
+
+If you expand a list item and then either scroll the list until the item is out of view, or rotate the device and then go back to the expanded item, you'll see that the item is now back to its initial state.
+
+The solution for this is to use rememberSaveable for the expanded state as well:
+```
+var expanded by rememberSaveable { mutableStateOf(false) }
+```
+
+
+## Styling and theming your app
+If you open the ui/theme/Theme.kt file, you see that BasicsCodelabTheme uses MaterialTheme in its implementation:
+
+```kotlin
+@Composable
+fun BasicsCodelabTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    // ...
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography,
+        content = content
+    )
+}
+```
+
+Because  `BasicsCodelabTheme`  wraps  `MaterialTheme`  internally,  `MyApp`  is styled with the properties defined in the theme. From any descendant composable you can retrieve three properties of  `MaterialTheme`:  
+* `colorScheme`,  
+* `typography`  and  
+* `shapes`. 
+
+Use them to set a header style for one of your  `Text`s:
+
+```kotlin
+    Column(modifier = Modifier
+            .weight(1f)
+            .padding(bottom = extraPadding.coerceAtLeast(0.dp))
+    ) {
+            Text(text = "Hello, ")
+            Text(text = name, style = MaterialTheme.typography.headlineMedium)
+        }
+```
+
+Sometimes you need to deviate slightly from the selection of colors and font styles. In those situations it's better to base your color or style on an existing one.
+
+For this, you can modify a predefined style by using the `copy` function. Make the number extra bold:
+```kotlin
+import androidx.compose.ui.text.font.FontWeight
+// ...
+Text(
+    text = name,
+    style = MaterialTheme.typography.headlineMedium.copy(
+        fontWeight = FontWeight.ExtraBold
+    )
+)
+```
+
+
+
+# Design
+
+![main screen](https://developer.android.com/static/codelabs/jetpack-compose-layouts/img/9825de962ae22604_1920.png)
+
+
+First let's design below ui:
+![alt text](https://developer.android.com/static/codelabs/jetpack-compose-layouts/img/ea3d96db9dd6c062_1920.png)
+
+The image also needs to be scaled correctly. To do so, we can use the Image's contentScale parameter. There are several options, most notably:
+
+![alt text](https://developer.android.com/static/codelabs/jetpack-compose-layouts/img/5f17f07fcd0f1dc_1920.png)
+
+In general, to align composables inside a parent container, you set the  **alignment**  of that parent container. So instead of telling the child to position itself in its parent, you tell the parent how to align its children.
+
+For a  `Column`, you decide how its children should be aligned horizontally. The options are:
+
+-   Start
+-   CenterHorizontally
+-   End
+
+For a  `Row`, you set the vertical alignment. The options are similar to those of the  `Column`:
+
+-   Top
+-   CenterVertically
+-   Bottom
+
+For a  `Box`, you combine both horizontal and vertical alignment. The options are:
+
+-   TopStart
+-   TopCenter
+-   TopEnd
+-   CenterStart
+-   Center
+-   CenterEnd
+-   BottomStart
+-   BottomCenter
+-   BottomEnd
+
+
+All of the container's children will follow this same alignment pattern. You can override the behavior of a single child by adding an `align` modifier to it.
+
+```kotlin
+import androidx.compose.foundation.layout.paddingFromBaseline
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
+
+@Composable
+fun AlignYourBodyElement(
+   @DrawableRes drawable: Int,
+   @StringRes text: Int,
+   modifier: Modifier = Modifier
+) {
+   Column(
+       modifier = modifier,
+       horizontalAlignment = Alignment.CenterHorizontally
+   ) {
+       Image(
+           painter = painterResource(drawable),
+           contentDescription = null,
+           contentScale = ContentScale.Crop,
+           modifier = Modifier
+               .size(88.dp)
+               .clip(CircleShape)
+       )
+       Text(
+           text = stringResource(text),
+           modifier = Modifier.paddingFromBaseline(top = 24.dp, bottom = 8.dp),
+           style = MaterialTheme.typography.bodyMedium
+       )
+   }
+}
+
+
+@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+@Composable
+fun AlignYourBodyElementPreview() {
+   MySootheTheme {
+       AlignYourBodyElement(
+           text = R.string.ab1_inversions,
+           drawable = R.drawable.ab1_inversions,
+           modifier = Modifier.padding(8.dp)
+       )
+   }
+}
+```
+
+Let's design below UI now:
+![alt text](https://developer.android.com/static/codelabs/jetpack-compose-layouts/img/52e72a19e67f646d_1920.png)
+
+![alt text](https://developer.android.com/static/codelabs/jetpack-compose-layouts/img/b5a11ff3afd99c09_1920.png)
+
+This container uses surfaceVariant as its background color which is different from the background of the whole screen. It also has rounded corners. We specify these for the favorite collection card using Material's Surface composable.
+
+You can adapt the Surface to your needs by setting its parameters and modifier. In this case, the surface should have rounded corners. You can use the shape parameter for this. Instead of setting the shape to a Shape as for the Image in the previous step, you'll use a value coming from our Material theme.
+
+```kotlin
+@Composable
+fun FavoriteCollectionCard(
+   @DrawableRes drawable: Int,
+   @StringRes text: Int,
+   modifier: Modifier = Modifier
+) {
+   Surface(
+       shape = MaterialTheme.shapes.medium,
+       color = MaterialTheme.colorScheme.surfaceVariant,
+       modifier = modifier
+   ) {
+       Row(
+           verticalAlignment = Alignment.CenterVertically,
+           modifier = Modifier.width(255.dp)
+       ) {
+           Image(
+               painter = painterResource(drawable),
+               contentDescription = null,
+               contentScale = ContentScale.Crop,
+               modifier = Modifier.size(80.dp)
+           )
+           Text(
+               text = stringResource(text),
+               style = MaterialTheme.typography.titleMedium,
+               modifier = Modifier.padding(horizontal = 16.dp)
+           )
+       }
+   }
+}
+
+
+//..
+
+
+@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+@Composable
+fun FavoriteCollectionCardPreview() {
+   MySootheTheme {
+       FavoriteCollectionCard(
+           text = R.string.fc2_nature_meditations,
+           drawable = R.drawable.fc2_nature_meditations,
+           modifier = Modifier.padding(8.dp)
+       )
+   }
+}
+```
+
+
+
+
+## Approaches to Hide Views in Jetpack Compose
+
+### 1. Conditional Rendering
+**Best for:** Complete removal of components
+```kotlin
+if (shouldShow) {
+    Text("Only visible when shouldShow is true")
+}
+```
+- Component isn't included in the composition when hidden
+- No layout space taken when hidden
+- Most efficient approach for toggling visibility
+
+### 2. Alpha Modification
+**Best for:** Animations or temporarily hiding while preserving layout
+```kotlin
+Text(
+    text = "Invisible but maintains layout space",
+    modifier = Modifier.alpha(if (isVisible) 1f else 0f)
+)
+```
+- Component maintains its position and size
+- Still participates in layout measurement
+- Can be animated smoothly
+
+### 3. Size Modification
+**Best for:** Collapsing elements without removing them
+```kotlin
+Box(
+    modifier = Modifier.size(if (isVisible) 100.dp else 0.dp)
+)
+```
+- Component shrinks to zero size when hidden
+- Still exists in composition
+- Can be used with animated size changes
+
+### 4. Custom Layout Modifier
+**Best for:** Complex visibility behaviors
+```kotlin
+Modifier.layout { measurable, constraints ->
+    if (isVisible) {
+        val placeable = measurable.measure(constraints)
+        layout(placeable.width, placeable.height) {
+            placeable.place(0, 0)
+        }
+    } else {
+        layout(0, 0) {}
+    }
+}
+```
+- Most flexible approach
+- Allows custom layout logic based on visibility
+- Higher implementation complexity
+
+
+## Row
+* **What it is**: Row is a layout composable that arranges its children horizontally, one after the other, in a single row. Think of it like a `LinearLayout` with `orientation="horizontal"` in the traditional Android View system.
+* **Key Parameters:**
+* `modifier`: Used to apply size constraints, padding, background, click listeners, etc., to the Row itself.
+* `horizontalArrangement`: Controls how the children are spaced out along the horizontal axis within the Row. Common options include `Arrangement.Start, Arrangement.End, Arrangement.Center, Arrangement.SpaceBetween, Arrangement.SpaceAround, Arrangement.SpaceEvenly`.
+* `verticalAlignment`: Controls how children are aligned along the vertical axis within the Row. Common options include `Alignment.Top, Alignment.CenterVertically, Alignment.Bottom`.
+
+## Column Composable
+
+* **What it is:** `Column` is a layout composable that arranges its children `vertically`, one below the other, in a single column. Think of it like a `LinearLayout` with `orientation="vertical"` in the traditional Android View system.
+* **Key Parameters:**
+* `modifier`: Standard modifier for size, padding, background, etc.
+* `verticalArrangement`: Controls how the children are spaced out along the vertical axis within the Column. Common options include `Arrangement.Top, Arrangement.Bottom, Arrangement.Center, Arrangement.SpaceBetween, Arrangement.SpaceAround, Arrangement.SpaceEvenly.`
+`horizontalAlignment`: Controls how children are aligned along the horizontal axis within the Column. Common options include `Alignment.Start, Alignment.CenterHorizontally, Alignment.End.`
+
+* **When to Use It:**
+* Use Col`umn whenever you need to display a list of items vertically.
+* It's the go-to for simple top-to-bottom layouts like forms, lists of settings, or sections stacked vertically on a screen.
+* It's efficient and easy to understand for basic vertical sequences.
+
+```kotlin
+Column(
+    modifier = Modifier.padding(16.dp),
+    verticalArrangement = Arrangement.spacedBy(8.dp), // Add space between items
+    horizontalAlignment = Alignment.CenterHorizontally // Center items horizontally
+) {
+    Text("Item 1")
+    Text("Item 2")
+    Button(onClick = { /* ... */ }) {
+        Text("A Button")
+    }
+}
+```
+
+Understanding why below `Column` in below code takes entire screen size.
+
+```kotlin
+@Preview(showBackground = true, widthDp = 350, heightDp = 700)
+@Composable
+fun ColumnALignmentPreview() {
+    JetpackComposePracticeTheme {
+        Column(
+            modifier = Modifier.background(color = Color.Yellow),
+
+            ) {
+            Text(
+                text = "Hello Text 1",
+                modifier = Modifier.background(color = Color.Gray)
+            )
+            Text(
+                text = "Hello Text 2",
+                modifier = Modifier.background(color = Color.Cyan)
+            )
+        }
+    }
+}
+```
+
+![alt text](https://file%2B.vscode-resource.vscode-cdn.net/Users/ramakrishnajoshi/Documents/FlutterProjects/JetpackComposePractice/docs/images-for-doc/Screenshot%202025-04-06%20at%206.41.02%20PM.png?version%3D1743945139772)
+
+* **Column Measurement:** The `Column` measures its children ( like `Text` elements). Its width becomes the width of the wider Text, and its height becomes the sum of the Text heights. Let's say this measured size is `W x H`.
+* **Modifier.background:** This modifier is applied to the Column. It draws the primary color only within the measured bounds (`W x H`) of the Column.
+* **Parent Container (JetpackComposePracticeTheme):** The `Column` sits inside `JetpackComposePracticeTheme`. Themes often wrap their content in a `Surface`. **A Surface placed directly inside the setContent block (or the preview's root) often implicitly tries to fill the maximum available size given by its parent** (the preview area in this case).
+
+
+
+## ConstraintLayout in Jetpack Compose
+**What it is:** `ConstraintLayout` is a powerful and flexible layout composable that allows you to position children relative to each other or to the parent container using constraints. It helps create complex UIs with a **flatter view hierarchy** compared to deeply nested Rows and Columns. It's analogous to `ConstraintLayout` in the `XML` view system.
+
+It's available as a separate artifact that you need to add to your dependencies:
+```groovy
+// build.gradle.kts (app level)
+dependencies {
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+}
+```
+
+
+**Why is it needed?** While `Row`, `Column`, and `Box` are powerful for many layouts, ConstraintLayout excels in scenarios involving:
+* **Complex Relationships:** When the position of a composable depends on multiple other composables in ways that are difficult or inefficient to express with simple nesting of Rows and Columns (e.g., centering an element between two others, aligning baselines).
+* **Flat Hierarchies**: It allows you to create complex UIs with a flatter structure compared to deep nesting of basic layouts. Flatter hierarchies can sometimes lead to better performance and easier layout inspection.
+* **Relative Positioning:** Defining positions relative to siblings or the parent boundaries using constraints (start, end, top, bottom, baseline, guidelines, barriers) is its core strength.
+* **Adaptability:** It can be very useful for creating layouts that adapt well to different screen sizes and orientations, as the relationships between elements are explicitly defined.
+
+In essence, `ConstraintLayout` provides a more declarative way to position elements based on relationships rather than just linear stacking. You don't always need it – `simple layouts are often clearer and sufficient with Row and Column` – **but it's a valuable tool for more intricate UI designs.**
+
