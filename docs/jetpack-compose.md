@@ -279,7 +279,7 @@ fun Greeting() {
 
 However  **you can't just assign** `mutableStateOf`  **to a variable inside a composable**. As explained before, `recomposition can happen at any time which would call the composable again, resetting the state to a new mutable state with a value of`  `false`.
 
-To preserve state across recompositions, remember the mutable state using `remember`.
+**To preserve state across recompositions**, remember the mutable state using `remember`.
 
 ```kotlin
 @Composable
@@ -295,6 +295,9 @@ fun Greeting(...) {
 Note that if you call the same composable from different parts of the screen you will create **different UI elements**, each with its own version of the state.  **You can think of internal state as a private variable in a class.**
 
 The composable function will automatically be "subscribed" to the state. **If the state changes, composables that read these fields will be recomposed to display the updates.**
+
+A value calculated by remember is stored in the Composition during the initial composition, and the stored value is kept across recompositions.
+
 
 ### Expanding the item
 Now let's actually expand an item when requested. Add an additional variable that depends on our state:
@@ -488,7 +491,180 @@ fun OnboardingPreview() {
 
 Assigning  `onContinueClicked`  to an empty lambda expression means "do nothing", which is perfect for a preview.
 
+## Stateful vs Stateless Composables and State Hoisting
 
+Composables that don’t hold any state are called `stateless composables`. An easy way to create a statelesscomposable is by using `state hoisting`.
+
+`State hoisting` in Compose is a `pattern of moving state to a composable’s caller to make a composable stateless`. The general pattern for state hoisting in Jetpack Compose is to replace the state variable with two parameters:
+
+* value: T — the current value to display
+* onValueChange: (T) -> Unit — an event that requests the value to change with a new value T
+
+where this value represents any state that could be modified.
+
+* 👉A stateless composable is a composable that doesn’t own any state, meaning it doesn’t hold or define or modify new state.
+
+* 👉A stateful composable is a composable that owns a piece of state that can change over time.
+
+* 📖 In real apps, having a 100% stateless composable can be difficult to achieve depending on the composable’s responsibilities. **We should design our composables in a way that they will own as little state as possible and allow the state to be hoisted**, when it makes sense, by exposing it in the composable’s API.
+
+`StatefulCounter` owns the state. That means that it holds the `coffeeCount` state and modifies it when calling the `StatelessCounter` function.
+
+```kotlin
+@Composable
+fun StatelessCounter(coffeeCount: Int, onIncrement: () -> Unit, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(16.dp)) {
+        Text("You've had $coffeeCount cups of coffee.")
+        Button(onClick = onIncrement, Modifier.padding(top = 8.dp), enabled = coffeeCount < 3) {
+            Text("Add one")
+        }
+    }
+}
+
+@Composable
+fun StatefulCounter(modifier: Modifier = Modifier) {
+    var coffeeCount by rememberSaveable { mutableStateOf(0) }
+    StatelessCounter(coffeeCount, { coffeeCount++ }, modifier)
+}
+@Composable
+fun CoffeeCounter() {
+    StatefulCounter()
+}
+```
+🎉 We hoisted coffeeCount from StatelessCounter to StatefulCounter.
+
+## Key Point: When hoisting state, there are two rules to help you figure out where state should go:
+1. Rule 1: State should be hoisted to at least the lowest common parent of all composables that use the state (read).
+2. Rule 2: If two states change in response to the same events they should be hoisted to the same level.
+
+
+### Rule 1: State should be hoisted to at least the lowest common parent of all composables that use the state (read).
+```kotlin
+@Composable
+fun MyScreen() {
+    var name by remember { mutableStateOf("Betül") }
+
+    Column {
+        NameInput(name = name, onNameChange = { name = it })
+        GreetingMessage(name = name)
+    }
+}
+
+@Composable
+fun NameInput(name: String, onNameChange: (String) -> Unit) {
+    TextField(value = name, onValueChange = onNameChange)
+}
+
+@Composable
+fun GreetingMessage(name: String) {
+    Text(text = "Hello, $name!")
+}
+
+
+Why this works:
+Both NameInput and GreetingMessage need access to name.
+So we hoist name to MyScreen(), the lowest common parent.
+```
+### Rule 2: If two states change in response to the same events they should be hoisted to the same level.
+```kotlin
+@Composable
+fun MyScreen() {
+    var likes by remember { mutableStateOf(0) }
+    var views by remember { mutableStateOf(0) }
+
+    Stats(likes, views, onStatsUpdate = {
+        likes++
+        views++
+    })
+}
+
+@Composable
+fun Stats(likes: Int, views: Int, onStatsUpdate: () -> Unit) {
+    Column {
+        Text("Likes: $likes")
+        Text("Views: $views")
+        Button(onClick = onStatsUpdate) {
+            Text("Click Me")
+        }
+    }
+}
+
+Why this works:
+Both likes and views change from the same event (button press), 
+so they’re hoisted to the same level (MyScreen()) to stay in sync
+```
+
+You can hoist the state higher than these rules require, but `if you don’t hoist the state high enough, it might be difficult or impossible to follow unidirectional data flow.`
+
+
+As mentioned, state hoisting has some benefits.
+
+1. **Our stateless composable can now be reused.**
+2. **Our stateful composable function can provide the same state to multiple composable functions.**
+
+### Benefit 1. Our stateless composable can now be reused.
+
+```kotlin
+@Composable
+fun StatelessCounter(count: Int, name : String, onIncrement: () -> Unit, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(16.dp)) {
+        Text("You've had $count cups of $name.")
+        Button(onClick = onIncrement, Modifier.padding(top = 8.dp), enabled = count < 3) {
+            Text("Add one")
+        }
+    }
+}
+
+@Composable
+fun StatefulCounter(modifier: Modifier = Modifier) {
+    var coffeeCount by rememberSaveable { mutableStateOf(0) }
+    var waterCount by rememberSaveable { mutableStateOf(0) }
+    var juiceCount by rememberSaveable { mutableStateOf(0) }
+    Column {
+        StatelessCounter(coffeeCount, "Coffee" ,{ coffeeCount++ }, modifier)
+        Spacer(modifier = Modifier.height(16.dp)) // Add space between counters
+        StatelessCounter(waterCount, "Water" ,{ waterCount++ }, modifier)
+        Spacer(modifier = Modifier.height(16.dp)) // Add space between counters
+        StatelessCounter(juiceCount,"Juice" ,{ juiceCount++ }, modifier)
+    }
+}
+@Composable
+fun CoffeeCounter() {
+    StatefulCounter()
+}
+```
+
+If  **juiceCount**  is modified then  **StatefulCounter**  is recomposed. During recomposition, Compose identifies which functions read  **juiceCount**  and triggers recomposition of only those functions.
+
+When the user taps to increment  **juiceCount**,  **StatefulCounter**  recomposes, and so does the  **StatelessCounter**  that reads  **juiceCount**. But the  **StatelessCounter**  that reads  **coffeeCount**  and  **waterCount**  are not recomposed.
+
+![alt text](https://file%2B.vscode-resource.vscode-cdn.net/Users/ramakrishnajoshi/Documents/FlutterProjects/JetpackComposePractice/docs/images-for-doc/state-hoisting-benefits.png?version%3D1744147507013)
+
+### Benefit 2: Our stateful composable function can provide the same state to multiple composable functions.
+
+```kotlin
+@Composable  
+fun StatefulCounter(modifier: Modifier = Modifier) {  
+    var coffeeCount by rememberSaveable { mutableStateOf(0) }  
+  
+    StatelessCounter(
+        coffeeCount, 
+        "Coffee" ,
+        { coffeeCount++ },
+        modifier
+    )  
+
+    AnotherStatelessMethod(
+        coffeeCount, 
+        { coffeeCount *= 2 }
+    )  
+   
+}
+```
+
+In this case, if the count is updated by either  **StatelessCounter**  or  **AnotherStatelessCounter**, everything is recomposed, which is expected.
+
+Because hoisted state can be  **shared**, be sure to pass only the state that the composables need to avoid unnecessary recompositions, and to increase reusability.
 
 
 
