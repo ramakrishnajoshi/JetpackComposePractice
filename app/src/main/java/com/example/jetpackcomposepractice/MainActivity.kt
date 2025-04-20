@@ -342,7 +342,7 @@ fun testingConstraintLayout() {
         mutableStateOf<Boolean>(true)
     }
     ConstraintLayout {
-        val (text1, text2, button1) = createRef();
+        val (text1, text2, button1) = createRefs();
 
         Text(
             text = "This is Text 1",
@@ -355,7 +355,7 @@ fun testingConstraintLayout() {
             text = "This is text 2",
             modifier = Modifier.constrainAs(text2) {
                 top.linkTo(parent.top)
-                start.linkTo(text1.top)
+                start.linkTo(text1.end)
             }
         )
         Button(
