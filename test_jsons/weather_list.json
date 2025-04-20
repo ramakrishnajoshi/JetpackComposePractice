@@ -1,110 +1,254 @@
 [
   {
     "cityName": "Bangalore",
+    "state": "Karnataka",
     "temperature": 34.2,
     "windSpeed": 12.5,
-    "description": "Known as the 'Silicon Valley of India' and the 'Garden City'."
+    "humidity": 55,
+    "weatherCondition": "Partly Cloudy, Warm",
+    "description": "Known as the 'Silicon Valley of India' and the 'Garden City'.",
+    "famousFor": ["Lal Bagh Botanical Garden", "Cubbon Park", "Vidhana Soudha", "Tech Hubs"],
+    "bestTimeToVisit": "September to February",
+    "airportCode": "BLR",
+    "imageUrl": "https://raw.githubusercontent.com/ramakrishnajoshi/JetpackComposePractice/refs/heads/master/test_jsons/images/bangalore.jpg",
+    "backgroundColor": "#D0F0C0"
   },
   {
     "cityName": "Delhi",
+    "state": "Delhi (UT)",
     "temperature": 41.5,
-    "windSpeed": 18.0,
-    "description": "India's capital territory, a massive metropolitan area blending historical Mughal-era landmarks with modern infrastructure."
+    "windSpeed": 18.0,`
+    "humidity": 25,
+    "weatherCondition": "Sunny and Very Hot",
+    "description": "India's capital territory, blending historical landmarks with modernity.",
+    "famousFor": ["India Gate", "Red Fort", "Qutub Minar", "Lotus Temple", "Humayun's Tomb"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "DEL",
+    "imageUrl": "https://raw.githubusercontent.com/ramakrishnajoshi/JetpackComposePractice/refs/heads/master/test_jsons/images/delhi.jpg",
+    "backgroundColor": "#FF7F50"
   },
   {
     "cityName": "Mumbai",
+    "state": "Maharashtra",
     "temperature": 33.8,
     "windSpeed": 22.1,
-    "description": "The financial capital of India, home to the Bollywood film industry and iconic landmarks like the Gateway of India."
+    "humidity": 72,
+    "weatherCondition": "Hot and Humid",
+    "description": "The financial capital, home to Bollywood and iconic landmarks.",
+    "famousFor": ["Gateway of India", "Marine Drive", "Elephanta Caves", "Bollywood", "CSMT Station"],
+    "bestTimeToVisit": "November to February",
+    "airportCode": "BOM",
+    "imageUrl": "",
+    "backgroundColor": "#ADD8E6"
   },
   {
     "cityName": "Kolkata",
+    "state": "West Bengal",
     "temperature": 36.1,
     "windSpeed": 14.8,
-    "description": "Often called the 'Cultural Capital of India', known for its colonial architecture, art galleries, and the Howrah Bridge."
+    "humidity": 68,
+    "weatherCondition": "Hot and Humid, Chance of Thunderstorms",
+    "description": "The 'Cultural Capital', known for colonial architecture and art.",
+    "famousFor": ["Howrah Bridge", "Victoria Memorial", "Dakshineswar Kali Temple", "Durga Puja"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "CCU",
+    "imageUrl": "",
+    "backgroundColor": "#FFFACD"
   },
   {
     "cityName": "Chennai",
+    "state": "Tamil Nadu",
     "temperature": 35.5,
     "windSpeed": 19.3,
-    "description": "A major cultural, economic, and educational center in South India, famous for its beaches and automotive industry."
+    "humidity": 70,
+    "weatherCondition": "Hot and Humid",
+    "description": "South Indian hub famous for beaches and the automotive industry.",
+    "famousFor": ["Marina Beach", "Kapaleeshwarar Temple", "Fort St. George", "San Thome Basilica"],
+    "bestTimeToVisit": "November to February",
+    "airportCode": "MAA",
+    "imageUrl": "",
+    "backgroundColor": "#F4A460"
   },
   {
     "cityName": "Hyderabad",
+    "state": "Telangana",
     "temperature": 38.0,
     "windSpeed": 11.2,
-    "description": "The 'City of Pearls', renowned for its historic sites like Charminar and Golconda Fort, and its delicious Biryani."
+    "humidity": 40,
+    "weatherCondition": "Sunny and Hot",
+    "description": "The 'City of Pearls', known for history, tech, and Biryani.",
+    "famousFor": ["Charminar", "Golconda Fort", "Ramoji Film City", "Hussain Sagar Lake", "Biryani"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "HYD",
+    "imageUrl": "",
+    "backgroundColor": "#F5F5F5"
   },
   {
     "cityName": "Pune",
+    "state": "Maharashtra",
     "temperature": 37.3,
     "windSpeed": 9.8,
-    "description": "Called the 'Oxford of the East' due to its numerous educational institutions, also known for its historical association with the Maratha Empire."
+    "humidity": 45,
+    "weatherCondition": "Hot and Dry",
+    "description": "'Oxford of the East', known for education and Maratha history.",
+    "famousFor": ["Shaniwar Wada", "Aga Khan Palace", "Sinhagad Fort", "Osho Ashram"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "PNQ",
+    "imageUrl": "",
+    "backgroundColor": "#E0B686"
   },
   {
     "cityName": "Ahmedabad",
+    "state": "Gujarat",
     "temperature": 42.1,
     "windSpeed": 13.5,
-    "description": "A UNESCO World Heritage City, recognized for its rich architectural heritage and history as a major textile hub."
+    "humidity": 30,
+    "weatherCondition": "Sunny and Very Hot",
+    "description": "UNESCO World Heritage City with rich architecture and textile history.",
+    "famousFor": ["Sabarmati Ashram", "Adalaj Stepwell", "Kankaria Lake", "Jama Masjid", "Textiles"],
+    "bestTimeToVisit": "November to February",
+    "airportCode": "AMD",
+    "imageUrl": "",
+    "backgroundColor": "#FFD700"
   },
   {
     "cityName": "Jaipur",
+    "state": "Rajasthan",
     "temperature": 40.8,
     "windSpeed": 16.7,
-    "description": "The 'Pink City', famous for its stunning forts (Amber, Nahargarh) and palaces (Hawa Mahal, City Palace)."
+    "humidity": 28,
+    "weatherCondition": "Sunny and Very Hot",
+    "description": "The 'Pink City', famous for its stunning forts and palaces.",
+    "famousFor": ["Hawa Mahal", "Amber Fort", "City Palace", "Jantar Mantar", "Nahargarh Fort"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "JAI",
+    "imageUrl": "",
+    "backgroundColor": "#FFB6C1"
   },
   {
     "cityName": "Lucknow",
+    "state": "Uttar Pradesh",
     "temperature": 39.4,
     "windSpeed": 11.9,
-    "description": "The 'City of Nawabs', celebrated for its courtly manners, beautiful gardens, poetry, music, and Mughlai cuisine."
+    "humidity": 35,
+    "weatherCondition": "Sunny and Hot",
+    "description": "'City of Nawabs', celebrated for its courtesy, gardens, and cuisine.",
+    "famousFor": ["Bara Imambara", "Chota Imambara", "Rumi Darwaza", "Hazratganj", "Mughlai Cuisine"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "LKO",
+    "imageUrl": "",
+    "backgroundColor": "#E6E6FA"
   },
   {
     "cityName": "Kochi (Cochin)",
+    "state": "Kerala",
     "temperature": 32.9,
     "windSpeed": 17.4,
-    "description": "Known as the 'Queen of the Arabian Sea', a vibrant port city with a rich history of spice trade and unique Chinese fishing nets."
+    "humidity": 78,
+    "weatherCondition": "Humid, Chance of Showers",
+    "description": "'Queen of the Arabian Sea', known for backwaters and spice trade.",
+    "famousFor": ["Fort Kochi", "Chinese Fishing Nets", "Mattancherry Palace", "Kerala Backwaters"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "COK",
+    "imageUrl": "",
+    "backgroundColor": "#AFEEEE"
   },
   {
     "cityName": "Varanasi",
+    "state": "Uttar Pradesh",
     "temperature": 41.0,
     "windSpeed": 10.5,
-    "description": "One of the world's oldest continuously inhabited cities and a major spiritual hub on the banks of the Ganges River."
+    "humidity": 32,
+    "weatherCondition": "Sunny and Very Hot",
+    "description": "Spiritual capital on the Ganges, one of the world's oldest cities.",
+    "famousFor": ["Ganges River Ghats", "Kashi Vishwanath Temple", "Sarnath", "Evening Aarti"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "VNS",
+    "imageUrl": "",
+    "backgroundColor": "#FFAB91"
   },
   {
     "cityName": "Shimla",
+    "state": "Himachal Pradesh",
     "temperature": 22.5,
     "windSpeed": 15.2,
-    "description": "A picturesque hill station in the Himalayas, once the summer capital of British India, known for its Mall Road and Jakhu Temple."
+    "humidity": 50,
+    "weatherCondition": "Pleasant, Sunny",
+    "description": "Picturesque Himalayan hill station, former British summer capital.",
+    "famousFor": ["The Ridge", "Mall Road", "Jakhu Temple", "Kalka-Shimla Railway"],
+    "bestTimeToVisit": "March to June, September to November",
+    "airportCode": "SLV (limited) / IXC (nearby)",
+    "imageUrl": "",
+    "backgroundColor": "#B0E0E6"
   },
   {
     "cityName": "Guwahati",
+    "state": "Assam",
     "temperature": 30.5,
     "windSpeed": 8.1,
-    "description": "The gateway to Northeast India, situated on the Brahmaputra River, famous for the Kamakhya Temple."
+    "humidity": 75,
+    "weatherCondition": "Warm and Humid, Partly Cloudy",
+    "description": "Gateway to Northeast India, on the Brahmaputra river.",
+    "famousFor": ["Kamakhya Temple", "Umananda Temple", "Brahmaputra River", "Assam State Museum"],
+    "bestTimeToVisit": "October to April",
+    "airportCode": "GAU",
+    "imageUrl": "",
+    "backgroundColor": "#98FB98"
   },
   {
     "cityName": "Chandigarh",
+    "state": "Chandigarh (UT)",
     "temperature": 38.8,
     "windSpeed": 14.0,
-    "description": "A unique planned city known for its architecture designed by Le Corbusier, including the Capitol Complex and Rock Garden."
+    "humidity": 38,
+    "weatherCondition": "Sunny and Hot",
+    "description": "A planned city known for Le Corbusier's architecture.",
+    "famousFor": ["Rock Garden", "Sukhna Lake", "Capitol Complex", "Rose Garden"],
+    "bestTimeToVisit": "September to March",
+    "airportCode": "IXC",
+    "imageUrl": "",
+    "backgroundColor": "#D3D3D3"
   },
   {
     "cityName": "Bhopal",
+    "state": "Madhya Pradesh",
     "temperature": 39.9,
     "windSpeed": 12.3,
-    "description": "Known as the 'City of Lakes' for its numerous natural and artificial lakes, featuring a mix of historic and modern architecture."
+    "humidity": 36,
+    "weatherCondition": "Sunny and Hot",
+    "description": "'City of Lakes', featuring natural and artificial lakes.",
+    "famousFor": ["Upper Lake", "Lower Lake", "Van Vihar National Park", "Bharat Bhavan", "Taj-ul-Masajid"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "BHO",
+    "imageUrl": "",
+    "backgroundColor": "#A1CAF1"
   },
   {
     "cityName": "Agra",
+    "state": "Uttar Pradesh",
     "temperature": 42.5,
     "windSpeed": 13.9,
-    "description": "Home to the iconic Taj Mahal, one of the Seven Wonders of the World, along with other Mughal-era forts and tombs."
+    "humidity": 29,
+    "weatherCondition": "Sunny and Very Hot",
+    "description": "Home to the iconic Taj Mahal and other Mughal-era marvels.",
+    "famousFor": ["Taj Mahal", "Agra Fort", "Fatehpur Sikri", "Mehtab Bagh"],
+    "bestTimeToVisit": "October to March",
+    "airportCode": "AGR",
+    "imageUrl": "",
+    "backgroundColor": "#FFFFF0"
   },
   {
     "cityName": "Amritsar",
+    "state": "Punjab",
     "temperature": 40.2,
     "windSpeed": 17.1,
-    "description": "The spiritual center for Sikhism, famous for the magnificent Golden Temple (Harmandir Sahib)."
+    "humidity": 31,
+    "weatherCondition": "Sunny and Very Hot",
+    "description": "Spiritual center for Sikhism, famous for the Golden Temple.",
+    "famousFor": ["Golden Temple (Harmandir Sahib)", "Jallianwala Bagh", "Wagah Border Ceremony"],
+    "bestTimeToVisit": "September to March",
+    "airportCode": "ATQ",
+    "imageUrl": "",
+    "backgroundColor": "#FFE5B4"
   }
 ]
