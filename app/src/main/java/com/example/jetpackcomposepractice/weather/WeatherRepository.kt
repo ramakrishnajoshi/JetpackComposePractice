@@ -22,9 +22,18 @@ class WeatherRepository {
     }
 }
 
+// Update the WeatherData class to include all fields from JSON
 data class WeatherData(
     val cityName: String,
+    val state: String,
     val temperature: Double,
     val windSpeed: Double,
-    val description: String
+    val humidity: Int,
+    val weatherCondition: String,
+    val description: String,
+    val famousFor: List<String>,
+    val bestTimeToVisit: String,
+    val airportCode: String,
+    val imageUrl: String,
+    val backgroundColor: String
 )
