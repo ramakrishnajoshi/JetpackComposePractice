@@ -1,0 +1,96 @@
+<svg viewBox="0 0 800 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background and title -->
+  <rect x="0" y="0" width="800" height="630" fill="#f8f9fa"></rect>
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">MVVM with Clean Architecture Control Flow</text>
+  
+  <!-- Layer boxes -->
+  <rect x="50" y="80" width="700" height="100" rx="10" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"></rect>
+  <text x="400" y="110" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#1565c0">Presentation Layer</text>
+  
+  <rect x="50" y="200" width="700" height="160" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"></rect>
+  <text x="400" y="230" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#2e7d32">Domain Layer</text>
+  
+  <rect x="50" y="380" width="700" height="160" rx="10" fill="#fff3e0" stroke="#e65100" stroke-width="2"></rect>
+  <text x="460" y="410" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#e65100">Data Layer</text>
+  
+  <!-- Presentation Layer Components -->
+  <rect x="100" y="130" width="150" height="40" rx="5" fill="#bbdefb" stroke="#1565c0" stroke-width="1"></rect>
+  <text x="175" y="155" font-family="Arial" font-size="14" text-anchor="middle">UI (Activity/Compose)</text>
+  
+  <rect x="550" y="130" width="150" height="40" rx="5" fill="#bbdefb" stroke="#1565c0" stroke-width="1"></rect>
+  <text x="625" y="155" font-family="Arial" font-size="14" text-anchor="middle">ViewModel</text>
+  
+  <!-- Domain Layer Components -->
+  <rect x="100" y="250" width="150" height="40" rx="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"></rect>
+  <text x="175" y="275" font-family="Arial" font-size="14" text-anchor="middle">Entities</text>
+  
+  <rect x="550" y="250" width="150" height="40" rx="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"></rect>
+  <text x="625" y="275" font-family="Arial" font-size="14" text-anchor="middle">Use Cases</text>
+  
+  <rect x="300" y="300" width="200" height="40" rx="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"></rect>
+  <text x="400" y="325" font-family="Arial" font-size="14" text-anchor="middle">Repository Interfaces</text>
+  
+  <!-- Data Layer Components -->
+  <rect x="300" y="430" width="200" height="40" rx="5" fill="#ffe0b2" stroke="#e65100" stroke-width="1"></rect>
+  <text x="400" y="455" font-family="Arial" font-size="14" text-anchor="middle">Repository Implementations</text>
+  
+  <rect x="100" y="480" width="150" height="40" rx="5" fill="#ffe0b2" stroke="#e65100" stroke-width="1"></rect>
+  <text x="175" y="505" font-family="Arial" font-size="14" text-anchor="middle">Local Data Sources</text>
+  
+  <rect x="550" y="480" width="150" height="40" rx="5" fill="#ffe0b2" stroke="#e65100" stroke-width="1"></rect>
+  <text x="625" y="505" font-family="Arial" font-size="14" text-anchor="middle">Remote Data Sources</text>
+  
+  <!-- Flow arrows -->
+  <path d="M250,150 L550,150" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"></path>
+  <text x="400" y="140" font-family="Arial" font-size="12" text-anchor="middle">1. User Action</text>
+  
+  <path d="M625,170 L625,250" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"></path>
+  <text x="685" y="195" font-family="Arial" font-size="12" text-anchor="middle">2. Call Use Case</text>
+  
+  <path d="M550,270 L500,300" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"></path>
+  <text x="428" y="290" font-family="Arial" font-size="12" text-anchor="middle">3. Call Repository Interface</text>
+  
+  <path d="M400,340 L400,430" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="5,5"></path>
+  <text x="300" y="410" font-family="Arial" font-size="12" text-anchor="middle">4. Interface is implemented by</text>
+  
+  <path d="M300,450 L175,480" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"></path>
+  <text x="200" y="450" font-family="Arial" font-size="12" text-anchor="middle">5a. Access Local Data</text>
+  
+  <path d="M500,450 L625,480" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"></path>
+  <text x="600" y="450" font-family="Arial" font-size="12" text-anchor="middle">5b. Make API Calls</text>
+  
+  <!-- Return arrows -->
+  <path d="M175,480 L300,450" stroke="#0d47a1" stroke-width="2" fill="none" marker-end="url(#bluearrow)" stroke-dasharray="3,3"></path>
+  <path d="M625,480 L500,450" stroke="#0d47a1" stroke-width="2" fill="none" marker-end="url(#bluearrow)" stroke-dasharray="3,3"></path>
+  <path d="M400,430 L400,340" stroke="#0d47a1" stroke-width="2" fill="none" marker-end="url(#bluearrow)" stroke-dasharray="3,3"></path>
+  <path d="M500,300 L550,270" stroke="#0d47a1" stroke-width="2" fill="none" marker-end="url(#bluearrow)" stroke-dasharray="3,3"></path>
+  <path d="M625,250 L625,170" stroke="#0d47a1" stroke-width="2" fill="none" marker-end="url(#bluearrow)" stroke-dasharray="3,3"></path>
+  <path d="M550,150 L250,150" stroke="#0d47a1" stroke-width="2" fill="none" marker-end="url(#bluearrow)" stroke-dasharray="3,3"></path>
+  
+  <text x="690" y="315" font-family="Arial" font-size="12" text-anchor="middle" fill="#0d47a1">6. Data Returns</text>
+  <text x="690" y="330" font-family="Arial" font-size="12" text-anchor="middle" fill="#0d47a1">Through The Same</text>
+  <text x="690" y="345" font-family="Arial" font-size="12" text-anchor="middle" fill="#0d47a1">Path in Reverse</text>
+  
+  <!-- Use Case to Entity -->
+  <path d="M550,270 L250,270" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrowhead)"></path>
+  <text x="400" y="255" font-family="Arial" font-size="12" text-anchor="middle">Use Cases work with Entities</text>
+  
+  <!-- Description Box (two-line) -->
+  <rect x="50" y="570" width="700" height="50" rx="5" fill="white" stroke="#333" stroke-width="1"></rect>
+  <text x="400" y="590" font-family="Arial" font-size="14" text-anchor="middle">
+    Domain Layer defines interfaces, Data Layer implements them.
+  </text>
+  <text x="400" y="610" font-family="Arial" font-size="14" text-anchor="middle">
+    Domain Layer never directly calls API or database.
+  </text>
+
+  <!-- Arrow definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#000"></polygon>
+    </marker>
+    <marker id="bluearrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0d47a1"></polygon>
+    </marker>
+  </defs>
+</svg>

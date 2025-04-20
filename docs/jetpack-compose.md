@@ -638,7 +638,7 @@ If  **juiceCount**  is modified then  **StatefulCounter**  is recomposed. During
 
 When the user taps to increment  **juiceCount**,  **StatefulCounter**  recomposes, and so does the  **StatelessCounter**  that reads  **juiceCount**. But the  **StatelessCounter**  that reads  **coffeeCount**  and  **waterCount**  are not recomposed.
 
-![alt text](https://file%2B.vscode-resource.vscode-cdn.net/Users/ramakrishnajoshi/Documents/FlutterProjects/JetpackComposePractice/docs/images-for-doc/state-hoisting-benefits.png?version%3D1744147507013)
+![alt text](images-for-doc/state-hoisting-benefits.png)
 
 ### Benefit 2: Our stateful composable function can provide the same state to multiple composable functions.
 
@@ -1020,7 +1020,7 @@ fun ColumnALignmentPreview() {
 }
 ```
 
-![alt text](https://file%2B.vscode-resource.vscode-cdn.net/Users/ramakrishnajoshi/Documents/FlutterProjects/JetpackComposePractice/docs/images-for-doc/Screenshot%202025-04-06%20at%206.41.02%20PM.png?version%3D1743945139772)
+![alt text](images-for-doc/Screenshot-column.png)
 
 * **Column Measurement:** The `Column` measures its children ( like `Text` elements). Its width becomes the width of the wider Text, and its height becomes the sum of the Text heights. Let's say this measured size is `W x H`.
 * **Modifier.background:** This modifier is applied to the Column. It draws the primary color only within the measured bounds (`W x H`) of the Column.
