@@ -1,0 +1,110 @@
+[
+  {
+    "cityName": "Bangalore",
+    "temperature": 34.2,
+    "windSpeed": 12.5,
+    "description": "Known as the 'Silicon Valley of India' and the 'Garden City'."
+  },
+  {
+    "cityName": "Delhi",
+    "temperature": 41.5,
+    "windSpeed": 18.0,
+    "description": "India's capital territory, a massive metropolitan area blending historical Mughal-era landmarks with modern infrastructure."
+  },
+  {
+    "cityName": "Mumbai",
+    "temperature": 33.8,
+    "windSpeed": 22.1,
+    "description": "The financial capital of India, home to the Bollywood film industry and iconic landmarks like the Gateway of India."
+  },
+  {
+    "cityName": "Kolkata",
+    "temperature": 36.1,
+    "windSpeed": 14.8,
+    "description": "Often called the 'Cultural Capital of India', known for its colonial architecture, art galleries, and the Howrah Bridge."
+  },
+  {
+    "cityName": "Chennai",
+    "temperature": 35.5,
+    "windSpeed": 19.3,
+    "description": "A major cultural, economic, and educational center in South India, famous for its beaches and automotive industry."
+  },
+  {
+    "cityName": "Hyderabad",
+    "temperature": 38.0,
+    "windSpeed": 11.2,
+    "description": "The 'City of Pearls', renowned for its historic sites like Charminar and Golconda Fort, and its delicious Biryani."
+  },
+  {
+    "cityName": "Pune",
+    "temperature": 37.3,
+    "windSpeed": 9.8,
+    "description": "Called the 'Oxford of the East' due to its numerous educational institutions, also known for its historical association with the Maratha Empire."
+  },
+  {
+    "cityName": "Ahmedabad",
+    "temperature": 42.1,
+    "windSpeed": 13.5,
+    "description": "A UNESCO World Heritage City, recognized for its rich architectural heritage and history as a major textile hub."
+  },
+  {
+    "cityName": "Jaipur",
+    "temperature": 40.8,
+    "windSpeed": 16.7,
+    "description": "The 'Pink City', famous for its stunning forts (Amber, Nahargarh) and palaces (Hawa Mahal, City Palace)."
+  },
+  {
+    "cityName": "Lucknow",
+    "temperature": 39.4,
+    "windSpeed": 11.9,
+    "description": "The 'City of Nawabs', celebrated for its courtly manners, beautiful gardens, poetry, music, and Mughlai cuisine."
+  },
+  {
+    "cityName": "Kochi (Cochin)",
+    "temperature": 32.9,
+    "windSpeed": 17.4,
+    "description": "Known as the 'Queen of the Arabian Sea', a vibrant port city with a rich history of spice trade and unique Chinese fishing nets."
+  },
+  {
+    "cityName": "Varanasi",
+    "temperature": 41.0,
+    "windSpeed": 10.5,
+    "description": "One of the world's oldest continuously inhabited cities and a major spiritual hub on the banks of the Ganges River."
+  },
+  {
+    "cityName": "Shimla",
+    "temperature": 22.5,
+    "windSpeed": 15.2,
+    "description": "A picturesque hill station in the Himalayas, once the summer capital of British India, known for its Mall Road and Jakhu Temple."
+  },
+  {
+    "cityName": "Guwahati",
+    "temperature": 30.5,
+    "windSpeed": 8.1,
+    "description": "The gateway to Northeast India, situated on the Brahmaputra River, famous for the Kamakhya Temple."
+  },
+  {
+    "cityName": "Chandigarh",
+    "temperature": 38.8,
+    "windSpeed": 14.0,
+    "description": "A unique planned city known for its architecture designed by Le Corbusier, including the Capitol Complex and Rock Garden."
+  },
+  {
+    "cityName": "Bhopal",
+    "temperature": 39.9,
+    "windSpeed": 12.3,
+    "description": "Known as the 'City of Lakes' for its numerous natural and artificial lakes, featuring a mix of historic and modern architecture."
+  },
+  {
+    "cityName": "Agra",
+    "temperature": 42.5,
+    "windSpeed": 13.9,
+    "description": "Home to the iconic Taj Mahal, one of the Seven Wonders of the World, along with other Mughal-era forts and tombs."
+  },
+  {
+    "cityName": "Amritsar",
+    "temperature": 40.2,
+    "windSpeed": 17.1,
+    "description": "The spiritual center for Sikhism, famous for the magnificent Golden Temple (Harmandir Sahib)."
+  }
+]
