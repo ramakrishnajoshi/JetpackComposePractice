@@ -116,6 +116,7 @@ async: Returns a Deferred, which is a subinterface of Job
 Using job.join() to ensure a certain operation finishes before proceeding.
 
 withContext in Kotlin Coroutines returns the result of the block of code that you execute within it.
+
 ```kotlin
 suspend fun calculateSumInBackground(): Int {
     return withContext(Dispatchers.Default) {
@@ -140,7 +141,7 @@ without blocking the calling thread.
 especially in main functions or unit tests, to start the execution of coroutine-based code from a 
 non-suspending environment.
 
-Understanding SupervisorScope
+** Understanding SupervisorScope **
 A SupervisorScope is a coroutine scope that creates a supervisor job. Unlike a regular CoroutineScope 
 where the failure or cancellation of a child coroutine will cause the cancellation of its siblings 
 and the scope itself (due to the principle of structured concurrency), a SupervisorScope isolates 
